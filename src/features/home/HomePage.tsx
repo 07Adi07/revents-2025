@@ -15,7 +15,7 @@ export default function HomePage() {
         <Header as='h1'>
           <Image
             size='massive'
-            src='/logo.png'
+            src='public/categoryImages/logo.png'
             alt='logo'
             style={{ marginBottom: 12 }}
           />
