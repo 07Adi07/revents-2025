@@ -4,6 +4,7 @@ import { AppEvent } from "../../../app/types/event";
 import { useAppSelector } from "../../../app/store/store";
 import { toast } from "react-toastify";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { format } from "date-fns";
 
 type Props = {
   event: AppEvent;
@@ -68,7 +69,7 @@ export default function EventDetailedHeader({ event }: Props) {
                   content={event.title}
                   style={{ color: "white" }}
                 />
-                <p>{event.date}</p>
+                <p>{format(new Date(event.date), "dd MMM yyyy, h:mm a")}</p>
                 <p>
                   Hosted by <strong>{event.hostedBy}</strong>
                 </p>
