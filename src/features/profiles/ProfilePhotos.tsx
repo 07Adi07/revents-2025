@@ -21,7 +21,7 @@ export default function ProfilePhotos({ profile }: Props) {
   const { loadCollection, remove } = useFireStore(
     `profiles/${profile.id}/photos`
   );
-  const { update } = useFireStore("profiles");
+ 
 
   useEffect(() => {
     loadCollection(actions);
@@ -32,6 +32,7 @@ export default function ProfilePhotos({ profile }: Props) {
       photoURL: photo.url,
     });
     await updateProfile(auth.currentUser!, {
+      await batchSetPhoto(photo.url)
       photoURL: photo.url,
     });
   }
