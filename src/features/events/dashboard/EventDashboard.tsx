@@ -57,12 +57,16 @@ export default function EventDashboard() {
           </>
         ) : (
           <>
-            <EventList
-              events={events}
-              hasMore={hasMore.current}
-              loadMore={loadMore}
-              loading={status === "loading"}
-            />
+            {events.length === 0 ? (
+              <EmptyState />
+            ) : (
+              <EventList
+                events={events}
+                hasMore={hasMore.current}
+                loadMore={loadMore}
+                loading={status === "loading"}
+              />
+            )}
           </>
         )}
       </Grid.Column>
