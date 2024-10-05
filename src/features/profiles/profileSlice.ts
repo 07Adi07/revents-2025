@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { createGenericSlice, GenericState } from "../../app/store/genericSlice";
+import { GenericState, createGenericSlice } from "../../app/store/genericSlice";
 import { Profile } from "../../app/types/profile";
 import { Timestamp } from "firebase/firestore";
 

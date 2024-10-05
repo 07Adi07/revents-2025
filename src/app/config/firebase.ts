@@ -8,8 +8,12 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
+declare global {
+  // eslint-disable-next-line no-var
+  var FIREBASE_APPCHECK_DEBUG_TOKEN: boolean | string | undefined;
+}
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -23,8 +27,17 @@ const firebaseConfig = {
   appId: "1:708675613702:web:736a042581f33220e73f87",
 };
 
+if (import.meta.env.DEV) {
+  FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider("6LcduVcqAAAAAPqV_NENBw00RivZ6eNPyja7c3Ke"),
+  isTokenAutoRefreshEnabled: true,
+});
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);

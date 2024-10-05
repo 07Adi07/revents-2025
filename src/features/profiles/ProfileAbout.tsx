@@ -11,6 +11,7 @@ type Props = {
 export default function ProfileAbout({ profile }: Props) {
   const [editMode, setEditMode] = useState(false);
   const isCurrentUser = auth.currentUser?.uid === profile.id;
+
   return (
     <Tab.Pane>
       <Grid>

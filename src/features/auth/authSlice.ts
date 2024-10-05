@@ -5,6 +5,7 @@ import { User } from "firebase/auth";
 type State = {
   authenticated: boolean;
   currentUser: AppUser | null;
+  initialized: boolean;
 };
 
 const initialState: State = {
@@ -20,6 +21,7 @@ export const authSlice = createSlice({
       reducer: (state, action: PayloadAction<AppUser>) => {
         state.authenticated = true;
         state.currentUser = action.payload;
+        state.initialized = true;
       },
       prepare: (user: User) => {
         const mapped: AppUser = {
@@ -35,6 +37,7 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.authenticated = false;
       state.currentUser = null;
+      state.initialized = true;
     },
   },
 });

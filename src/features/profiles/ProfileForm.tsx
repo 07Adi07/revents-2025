@@ -1,7 +1,8 @@
-import { updateProfile } from "firebase/auth";
+import { FieldValues, useForm } from "react-hook-form";
 import { useFireStore } from "../../app/hooks/firestore/useFirestore";
 import { Profile } from "../../app/types/profile";
-import { useForm } from "react-hook-form";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../../app/config/firebase";
 import { Button, Form } from "semantic-ui-react";
 
 type Props = {

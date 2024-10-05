@@ -1,4 +1,4 @@
-import { createGenericSlice, GenericState } from "../../app/store/genericSlice";
+import { GenericState, createGenericSlice } from "../../app/store/genericSlice";
 import { Photo } from "../../app/types/profile";
 
 type State = {

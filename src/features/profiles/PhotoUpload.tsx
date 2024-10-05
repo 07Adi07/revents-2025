@@ -1,6 +1,5 @@
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
-
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginImageCrop from "filepond-plugin-image-crop";
 import FilePondPluginImageTransform from "filepond-plugin-image-transform";
@@ -8,10 +7,10 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { useState } from "react";
 import { useFireStore } from "../../app/hooks/firestore/useFirestore";
 import { auth, storage } from "../../app/config/firebase";
+import { createId } from "@paralleldrive/cuid2";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Profile } from "../../app/types/profile";
 import { updateProfile } from "firebase/auth";
-import { createId } from "@paralleldrive/cuid2";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -26,7 +25,6 @@ type Props = {
 
 export default function PhotoUpload({ profile, setEditMode }: Props) {
   const [files, setFiles] = useState<any>([]);
-
   const { update } = useFireStore("profiles");
   const { set } = useFireStore(`profiles/${auth.currentUser?.uid}/photos`);
 

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Grid, Header, Tab, Image } from "semantic-ui-react";
+import { Profile } from "../../app/types/profile";
 import { useFireStore } from "../../app/hooks/firestore/useFirestore";
 import { useAppSelector } from "../../app/store/store";
 import { CollectionOptions } from "../../app/hooks/firestore/types";
+import { actions } from "../events/eventSlice";
 import { format } from "date-fns";
 
 type Props = {
@@ -14,18 +16,9 @@ export default function ProfileEvents({ profile }: Props) {
   const { loadCollection } = useFireStore("events");
   const { data: events, status } = useAppSelector((state) => state.events);
   const panes = [
-    {
-      menuItem: "Future events",
-      pane: { key: "future" },
-    },
-    {
-      menuItem: "Future eventsPast events",
-      pane: { key: "past" },
-    },
-    {
-      menuItem: "Hosting",
-      pane: { key: "hosting" },
-    },
+    { menuItem: "Future events", pane: { key: "future" } },
+    { menuItem: "Past events", pane: { key: "past" } },
+    { menuItem: "Hosting", pane: { key: "hosting" } },
   ];
 
   const initialOptions: CollectionOptions = {
@@ -35,13 +28,10 @@ export default function ProfileEvents({ profile }: Props) {
         operator: "array-contains",
         value: profile.id,
       },
-      {
-        attribute: "date",
-        operator: ">=",
-        value: new Date(),
-      },
+      { attribute: "date", operator: ">=", value: new Date() },
     ],
     sort: { attribute: "date", order: "asc" },
+    reset: true,
   };
 
   const [options, setOptions] = useState<CollectionOptions>(initialOptions);
@@ -49,33 +39,28 @@ export default function ProfileEvents({ profile }: Props) {
   function handleSetQuery(tab: number) {
     let options: CollectionOptions = {} as CollectionOptions;
     switch (tab) {
-      case 1: //past events
+      case 1: // past events
         (options.queries = [
           {
             attribute: "attendeeIds",
             operator: "array-contains",
             value: profile.id,
           },
-          {
-            attribute: "date",
-            operator: "<",
-            value: new Date(),
-          },
+          { attribute: "date", operator: "<", value: new Date() },
         ]),
           (options.sort = { attribute: "date", order: "desc" });
+        options.reset = true;
         break;
-
-      case 2: //hosted
-        options.queries = [
-          {
-            attribute: "hostId",
-            operator: "==",
-            value: profile.id,
-          },
-        ];
-        options.sort = { attribute: "date", order: "asc" };
+      case 2: // hosted
+        (options.queries = [
+          { attribute: "hostUid", operator: "==", value: profile.id },
+        ]),
+          (options.sort = { attribute: "date", order: "asc" });
+        options.reset = true;
+        break;
       default:
         options = initialOptions;
+        options.reset = true;
         break;
     }
     setOptions(options);
@@ -86,14 +71,16 @@ export default function ProfileEvents({ profile }: Props) {
   }, [loadCollection, options]);
 
   return (
-    <Tab.Pane>
+    <Tab.Pane loading={status === "loading"}>
       <Grid>
         <Grid.Column width={16}>
           <Header floated='left' icon='calendar' content='events' />
         </Grid.Column>
         <Grid.Column width={16}>
           <Tab
-            onTabChange={(_e, data) => setActiveTab(data.activeIndex as number)}
+            onTabChange={(_e, data) =>
+              handleSetQuery(data.activeIndex as number)
+            }
             panes={panes}
             menu={{ secondary: true, pointing: true }}
           />
@@ -101,8 +88,8 @@ export default function ProfileEvents({ profile }: Props) {
             {events.map((event) => (
               <Card as={Link} to='/' key={event.id}>
                 <Image
-                  src={`/categoryImages/${event.category}`}
-                  style={{ minHeight: 100, objextFit: "cover" }}
+                  src={`/categoryImages/${event.category}.jpg`}
+                  style={{ minHeight: 100, objectFit: "cover" }}
                 />
                 <Card.Content>
                   <Card.Header content={event.title} textAlign='center' />
