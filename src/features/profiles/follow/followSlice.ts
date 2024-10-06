@@ -2,10 +2,10 @@ import {
   createGenericSlice,
   GenericState,
 } from "../../../app/store/genericSlice";
-import { Follow } from "../../../app/types/profile";
+import { Post } from "../../../app/types/post";
 
 type State = {
-  data: Follow[];
+  data: Post[];
 };
 
 const initialState: State = {
@@ -13,7 +13,9 @@ const initialState: State = {
 };
 
 export const followSlice = createGenericSlice({
-  name: "follow",
-  initialState: initialState as GenericState<Follow[]>,
+  name: "feed",
+  initialState: initialState as GenericState<Post[]>,
   reducers: {},
 });
+
+export const actions = feedSlice.actions;
